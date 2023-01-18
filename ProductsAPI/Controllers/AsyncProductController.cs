@@ -37,11 +37,11 @@ namespace ProductsAPI.Controllers
             _productServiceHttpClient.SendOrderToProductService(readProductDTO);
 
 
-            return CreatedAtRoute(nameof(GetProductById), new { readProductDTO.Id }, readProductDTO);
+            return CreatedAtRoute(nameof(GetProductAsyncById), new { readProductDTO.Id }, readProductDTO);
         }
 
-        [HttpGet("{id}", Name = "GetProductById")]
-        public ActionResult<ReadProductDTO> GetProductById(int id)
+        [HttpGet("{id}", Name = "GetProductAsyncById")]
+        public ActionResult<ReadProductDTO> GetProductAsyncById(int id)
         {
             var product = _repository.GetProductById(id);
             if (product != null)

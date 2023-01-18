@@ -15,7 +15,7 @@ namespace ProductsAPI.RabbitMqClient
         public RabbitMqClient(IConfiguration configuration)
         {
             _configuration = configuration;
-            _connection = new ConnectionFactory() {Uri = new Uri("amqps://yyyqxodl:QJ8qUbcyj-2np3fvICCpp8IwTrFwGD0S@jackal.rmq.cloudamqp.com/yyyqxodl")}.CreateConnection();
+            _connection = new ConnectionFactory() {Uri = new Uri("amqps://yyyqxodl:QJ8qUbcyj-2np3fvICCpp8IwTrFwGD0S@jackal.rmq.cloudamqp.com/yyyqxodl") }.CreateConnection();
             _channel = _connection.CreateModel();
             _channel.ExchangeDeclare(exchange: "trigger", type: ExchangeType.Fanout);
         }

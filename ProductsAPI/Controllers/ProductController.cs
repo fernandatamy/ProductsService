@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using ProductsAPI.Data;
 using ProductsAPI.Data.Dtos;
 using ProductsAPI.Data.Repository;
+using ProductsAPI.RabbitMqClient;
 
 namespace ProductsAPI.Controllers
 {
@@ -10,47 +11,42 @@ namespace ProductsAPI.Controllers
     [Route("api/products/[controller]")]
     public class ProductsController : ControllerBase
     {
-        private ProductContext _context;
         private IMapper _mapper;
         private IProductRepository _repository;
+        private IRabbitMqClient _rabbitMqClient;
 
-        public ProductsController(ProductContext context, IMapper mapper, ProductRepository repository)
+        public ProductsController(IMapper mapper,IProductRepository repository, IRabbitMqClient rabbitMqClient)
         {
-            _context = context;
             _mapper = mapper;
             _repository = repository;
+            _rabbitMqClient = rabbitMqClient;
         }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        public IActionResult AddProduct([FromBody] CreateProductDTO productDto)
+        public ActionResult<ReadProductDTO> AddProduct([FromBody] CreateProductDTO productDto)
         {
             Product product = _mapper.Map<Product>(productDto);
-            _context.Products.Add(product);
-            _context.SaveChanges();
-            return CreatedAtAction(nameof(ReturnProductByCode),
-                new { code = product.Id },
-                product);
-        }
+            _repository.CreateProduct(product);
+            _repository.SaveChanges();
 
-        private void CreatedAtAction()
-        {
-            throw new NotImplementedException();
+            var productReadDto = _mapper.Map<ReadProductDTO>(product);
+            return CreatedAtRoute(nameof(GetProductById), new { productReadDto.Id }, productReadDto);
         }
 
         [HttpGet]
         public IEnumerable<Product> ListProducts([FromQuery]int skip,
         [FromQuery]int take)
         {
-            return _context.Products.Skip(skip).Take(take);
+            return _repository.GetProducts().Skip(skip).Take(take);
         }
 
-        [HttpGet("{code}")]
-        public IActionResult ReturnProductByCode(int code)
+        [HttpGet("{id}", Name = "GetProductById")]
+        public ActionResult<ReadProductDTO> GetProductById(int id)
         {
-            var product = _context.Products.FirstOrDefault(product => product.Id == code);
+            var product = _repository.GetProductById(id);
             if (product == null) return NotFound();
-            return Ok(product);
+            return Ok(_mapper.Map<ReadProductDTO>(product));
         }
     }
 }
