@@ -4,7 +4,6 @@ using ProductsAPI.Data.Repository;
 using ProductsAPI.EventProcessor;
 using ProductsAPI.RabbitMqClient;
 using ProductsAPI.RabbitMqSubscriber;
-using ProductsAPI.ServiceHttpClient;
 using System;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,8 +22,6 @@ builder.Services.AddSingleton<IRabbitMqClient, RabbitMqClient>();
 
 builder.Services.AddHostedService<RabbitMqSubscriber>();
 
-
-builder.Services.AddHttpClient<IProductServiceHttpClient, ProductServiceHttpClient>();
 builder.Services.AddSingleton<IEventProcessor, EventProcessor>();
 
 var app = builder.Build();

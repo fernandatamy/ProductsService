@@ -13,13 +13,15 @@ namespace ProductsAPI.Controllers
     {
         private IMapper _mapper;
         private IProductRepository _repository;
-        private IRabbitMqClient _rabbitMqClient;
+        //private IRabbitMqClient _rabbitMqClient;
 
-        public ProductsController(IMapper mapper,IProductRepository repository, IRabbitMqClient rabbitMqClient)
+        public ProductsController(IMapper mapper,IProductRepository repository
+            //,IRabbitMqClient rabbitMqClient
+            )
         {
             _mapper = mapper;
             _repository = repository;
-            _rabbitMqClient = rabbitMqClient;
+            //_rabbitMqClient = rabbitMqClient;
         }
 
         [HttpPost]
