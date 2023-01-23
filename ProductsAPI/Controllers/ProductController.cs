@@ -1,9 +1,7 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using ProductsAPI.Data;
 using ProductsAPI.Data.Dtos;
 using ProductsAPI.Data.Repository;
-using ProductsAPI.RabbitMqClient;
 
 namespace ProductsAPI.Controllers
 {
@@ -13,15 +11,12 @@ namespace ProductsAPI.Controllers
     {
         private IMapper _mapper;
         private IProductRepository _repository;
-        //private IRabbitMqClient _rabbitMqClient;
 
         public ProductsController(IMapper mapper,IProductRepository repository
-            //,IRabbitMqClient rabbitMqClient
             )
         {
             _mapper = mapper;
             _repository = repository;
-            //_rabbitMqClient = rabbitMqClient;
         }
 
         [HttpPost]

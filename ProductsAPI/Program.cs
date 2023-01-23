@@ -4,7 +4,6 @@ using ProductsAPI.Data.Repository;
 using ProductsAPI.EventProcessor;
 using ProductsAPI.RabbitMqClient;
 using ProductsAPI.RabbitMqSubscriber;
-using System;
 
 var builder = WebApplication.CreateBuilder(args);
 

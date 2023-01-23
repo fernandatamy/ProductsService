@@ -1,5 +1,4 @@
-﻿using FluentMigrator.Infrastructure;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ProductsAPI.Data.Dtos
 {

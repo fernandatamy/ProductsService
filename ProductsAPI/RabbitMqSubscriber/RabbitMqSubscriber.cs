@@ -1,4 +1,5 @@
-﻿using ProductsAPI.EventProcessor;
+﻿using DocumentFormat.OpenXml.Spreadsheet;
+using ProductsAPI.EventProcessor;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
@@ -15,7 +16,12 @@ namespace ProductsAPI.RabbitMqSubscriber
         public RabbitMqSubscriber(IConfiguration configuration, IEventProcessor eventProcessor)
         {
             _configuration = configuration;
-            _connection = new ConnectionFactory() {Uri = new Uri("amqps://yyyqxodl:QJ8qUbcyj-2np3fvICCpp8IwTrFwGD0S@jackal.rmq.cloudamqp.com/yyyqxodl")}.CreateConnection();
+            ConnectionFactory factory = new ConnectionFactory();
+            factory.UserName = _configuration["RabbitMqUserName"];
+            factory.Password = _configuration["RabbitMqPassword"];
+            factory.VirtualHost = _configuration["RabbitMqVirtualHost"];
+            factory.HostName = _configuration["RabbitMqHostName"];
+            _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
             _channel.ExchangeDeclare(exchange: "trigger", type: ExchangeType.Fanout);
             _queueName = _channel.QueueDeclare().QueueName;
